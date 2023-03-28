@@ -14,19 +14,8 @@
 
     const eventChooser = () => {
         CardVis = false;
-        let rand = Math.random()
-        let status = userData.birthStatus
-        if(status == 'Slave'){
-            rand = Math.round(rand * (events.peasant.length -1) )
-            console.log(rand)
-            currentEvent = events.peasant[rand]
-        } else if(status == 'Lower/Middle Class'){
-            rand = rand * events.middleClass.length
-            currentEvent = events.middleClass[rand]
-        }else if(status == 'Aristocratic'){
-            rand = rand * events.aristocracy.length
-            currentEvent = events.aristocracy[rand]
-        }
+        let rand = Math.round(Math.random() * (events.length -1) )
+        currentEvent = events[rand]
         CardVis = true;
     }
 
@@ -56,7 +45,7 @@
             <div class="flex flex-col space-y-5">
                 <div>
                     <h1 class="text-2xl text-black dark:text-white">{currentEvent.title}</h1>
-                    <p>{events.peasant[0].context}</p>
+                    <p>{currentEvent.context}</p>
                 </div>
                 <QuestionCard event={currentEvent} on:nextEvent={() => nextEvent()}/>
             </div>

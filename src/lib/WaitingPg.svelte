@@ -39,10 +39,6 @@
 
 <div id="WaitingPg" class="app flex flex-col items-center space-y-5 justify-center">
     <p class="waitingAnim text-black dark:text-white">Waiting for game to start...</p>
-    <Card>
-        <p class="text-2xl text-black dark:text-white">You are ...</p>
-        <p>A {userData.gender} born into a {userData.birthStatus} family</p>
-    </Card>
 </div>
 
 <style>
