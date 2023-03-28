@@ -1,10 +1,9 @@
 <script>
-    import {Button, Card, Progressbar} from 'flowbite-svelte'
+    import { Card } from 'flowbite-svelte'
     import {events} from './events'
     import QuestionCard from './QuestionCard.svelte';
     import { usrData } from '../stores';
-    import { onMount } from 'svelte';
-    import { pb } from '../pocketbase';
+
 
     let userData;
     let CardVis;
@@ -17,7 +16,6 @@
         CardVis = false;
         let rand = Math.random()
         let status = userData.birthStatus
-        console.log(status)
         if(status == 'Slave'){
             rand = Math.round(rand * (events.peasant.length -1) )
             console.log(rand)
@@ -57,7 +55,7 @@
         <Card>
             <div class="flex flex-col space-y-5">
                 <div>
-                    <h1 class="text-2xl text-white">{currentEvent.title}</h1>
+                    <h1 class="text-2xl text-black dark:text-white">{currentEvent.title}</h1>
                     <p>{events.peasant[0].context}</p>
                 </div>
                 <QuestionCard event={currentEvent} on:nextEvent={() => nextEvent()}/>

@@ -1,9 +1,10 @@
 <script>
     import {pb} from '../pocketbase';
-    import { Progressbar, Spinner, Input, DarkMode, Button} from 'flowbite-svelte'
+    import { Progressbar, Spinner, Input, DarkMode, Button, FloatingLabelInput, Helper} from 'flowbite-svelte'
     import {usrData, currentPg, uid} from '../stores';
   
     var name;
+    let nameOkay = true;
    
     const loginHandler = async () => {
         const genderNum = Math.round(Math.random());
@@ -28,16 +29,22 @@
 
         birthStatus = 'Slave'
 
+        if(name == ""){
+            nameOkay=false
+            return
+        }
+
         const data = {
             "name": name,
             "score": 0,
             "gender": gender,
             "birthStatus": birthStatus,
             "currentScoreEffect": 1,
+            "correctStreak": 0,
         };
         const record = await pb.collection('players').create(data);
         uid.set(record.id);
-        usrData.set({score: data.score, name: data.name, gender: data.gender, birthStatus: data.birthStatus, currentScoreEffect: data.currentScoreEffect});
+        usrData.set({score: data.score, name: data.name, gender: data.gender, birthStatus: data.birthStatus, currentScoreEffect: data.currentScoreEffect, correctStreak: data.correctStreak});
         currentPg.set(1)
     }
 
@@ -45,7 +52,12 @@
 
 <div id="Login" class="app flex flex-col items-center space-y-5 justify-center">
     <div class="w-80">
-        <Input bind:value={name} required id="large-input" size="lg" placeholder="Name"/>
+        {#if nameOkay}
+            <FloatingLabelInput bind:value={name} style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="Name"/>
+        {:else if !nameOkay}
+            <FloatingLabelInput bind:value={name} color="red" style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="Name"/>
+            <Helper color="red">Please enter a name!</Helper>
+        {/if}
     </div>
     <Button on:click={loginHandler}>Go!</Button>
 </div>

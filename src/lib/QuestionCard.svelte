@@ -28,22 +28,41 @@
                 score: userData.score + (event.correctBenefit * userData.currentScoreEffect),
                 gender: userData.gender,
                 birthStatus: userData.birthStatus,
-                currentScoreEffect: userData.currentScoreEffect
+                currentScoreEffect: userData.currentScoreEffect,
+                correctStreak: userData.correctStreak + 1,
             })
+            if(userData.correctStreak > 20){
+                alerts.update(
+                    alerts => [...alerts, {id: uuidv4(), title: 'Absolutely Cracked My Man', context: 'Answer streak of 20!', time: 5, undomult: 1, valid: true}]
+                ) 
+            } else if(userData.correctStreak > 15){
+                alerts => [...alerts, {id: uuidv4(), title: 'You\'re crazy!', context: 'Answer streak of 15!', time: 5, undomult: 1, valid: true}]
+
+            } else if(userData.correctStreak > 10){
+                alerts => [...alerts, {id: uuidv4(), title: 'Alright!', context: 'Answer streak of 10!', time: 5, undomult: 1, valid: true}]
+
+            } else if(userData.correctStreak > 5){
+                alerts => [...alerts, {id: uuidv4(), title: 'A', context: 'Answer streak of 20!', time: 5, undomult: 1, valid: true}]
+
+            }
         } else if(answer != event.answer){
             usrData.set({
                 name: userData.name,
                 score: userData.score + (event.incorrectLoss * userData.currentScoreEffect),
                 gender: userData.gender,
                 birthStatus: userData.birthStatus,
-                currentScoreEffect: (userData.currentScoreEffect / 2)
+                currentScoreEffect: (userData.currentScoreEffect / 2),
+                correctStreak: 0,
             })
+            
             alerts.update(
-                alerts => [...alerts, {id: uuidv4(), title: event.incorrectEffect.name, context: event.incorrectEffect.context, time: event.incorrectEffect.time, undomult: 2}]
+                alerts => [...alerts, {id: uuidv4(), title: event.incorrectEffect.name, context: event.incorrectEffect.context, time: event.incorrectEffect.time, undomult: 2, valid: true}, {id: uuidv4(), title: 'Streak Lost', context: '', time: 5, undomult: 1, valid: true}]
             ) 
-            const record = pb.collection('players').update(uidVar, userData)
         }
+        const record = pb.collection('players').update(uidVar, userData)
     }
+
+
     const next = () => {
         answered = false;
         selectedAnswer = null;
@@ -52,7 +71,7 @@
 </script>
 
 <div id="QuestionCard">
-    <p class="text-lg text-white">{event.question}</p>
+    <p class="text-lg text-black dark:text-white">{event.question}</p>
     <div>
         {#if !answered}
             <div class="grid grid-cols-2 max-h-84 overflow-clip">

@@ -11,7 +11,7 @@ export const events = {
         correctBenefit: 5,
         incorrectLoss: -5,
         incorrectEffect: {
-            name: 'You\'re stil recovering from the plague',
+            name: 'You\'re recovering from the plague',
             context: '50% less points per question for 30 seconds.',
             time: 30,
             effect: -0.5,
@@ -28,7 +28,7 @@ export const events = {
         correctBenefit: 5,
         incorrectLoss: -5,
         incorrectEffect: {
-            name: 'You\'re stil recovering from the plague',
+            name: 'You\'re recovering from the plague',
             context: '50% less points per question for 30 seconds.',
             time: 30,
             effect: -0.5,
