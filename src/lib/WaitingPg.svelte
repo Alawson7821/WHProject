@@ -6,6 +6,8 @@
     let pg;
     let userData;
 
+    let waitingRecordID = '1wfcjxv3pfw5zok';
+
     usrData.subscribe((usrData) =>
         userData = usrData
     )
@@ -14,10 +16,10 @@
       pg = value
     )
 
-    const watchState = async () => {pb.collection('gameState').subscribe('thvgfme7s77i98v', function (e) {
+    const watchState = async () => {pb.collection('gameState').subscribe(waitingRecordID, function (e) {
     if(e.record.gameActive){
       currentPg.set(2)
-      pb.collection('gameState').unsubscribe('thvgfme7s77i98v');
+      pb.collection('gameState').unsubscribe(waitingRecordID);
     }else if(!e.record.gameActive){
       console.log('change detected, not true tho')
     }else{
@@ -26,7 +28,7 @@
   })}
 
   const checkActive = async() => {
-    const record = await pb.collection('gameState').getOne('thvgfme7s77i98v', {})
+    const record = await pb.collection('gameState').getOne(waitingRecordID, {})
     if(record.gameActive){
       currentPg.set(2)
     }else if(!record.gameActive){
