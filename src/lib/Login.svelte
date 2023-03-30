@@ -5,8 +5,10 @@
   
     var name;
     let nameOkay = true;
+    let spinnerVis = false;
    
     const loginHandler = async () => {
+        spinnerVis = true;
         const genderNum = Math.round(Math.random());
 
         let gender;
@@ -60,4 +62,5 @@
         {/if}
     </div>
     <Button on:click={loginHandler}>Go!</Button>
+    {#if spinnerVis}<Spinner/>{/if}
 </div>
