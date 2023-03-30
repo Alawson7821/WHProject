@@ -12,6 +12,7 @@
 
     let answered = false;
     let selectedAnswer;
+    let correctStreakBonusMult = 1;
 
     let userData;
     const userDataSub = usrData.subscribe((usrData) => userData = usrData )
@@ -28,32 +29,35 @@
         answered = true
         selectedAnswer = answer
         if(answer == event.answer){
+            if(userData.correctStreak == 19){
+                alerts.update(
+                    alerts => [...alerts, {id: uuidv4(), title: 'Absolutely Cracked My Man', context: 'Answer streak of 20!', time: 5, undomult: 1, valid: true}]
+                ) 
+                correctStreakBonusMult = 2
+            } else if(userData.correctStreak == 14){
+                alerts.update(
+                    alerts => [...alerts, {id: uuidv4(), title: 'You\'re crazy!', context: 'Answer streak of 15!', time: 5, undomult: 1, valid: true}]
+                )
+                correctStreakBonusMult = 1.8
+            } else if(userData.correctStreak == 9){
+                alerts.update(
+                    alerts => [...alerts, {id: uuidv4(), title: 'Alright!', context: 'Answer streak of 10!', time: 5, undomult: 1, valid: true}]
+                )
+                correctStreakBonusMult = 1.5
+            } else if(userData.correctStreak == 4 ){
+                alerts.update(
+                    alerts => [...alerts, {id: uuidv4(), title: 'Good Job!', context: 'Answer streak of 5!', time: 5, undomult: 1, valid: true}]
+                )
+                correctStreakBonusMult = 1.2
+            }
             usrData.set({
                 name: userData.name,
-                score: userData.score + (event.correctBenefit * userData.currentScoreEffect),
+                score: userData.score + ((event.correctBenefit * userData.currentScoreEffect) * correctStreakBonusMult),
                 gender: userData.gender,
                 birthStatus: userData.birthStatus,
                 currentScoreEffect: userData.currentScoreEffect,
                 correctStreak: userData.correctStreak + 1,
             })
-            if(userData.correctStreak > 20){
-                alerts.update(
-                    alerts => [...alerts, {id: uuidv4(), title: 'Absolutely Cracked My Man', context: 'Answer streak of 20!', time: 5, undomult: 1, valid: true}]
-                ) 
-            } else if(userData.correctStreak == 15){
-                alerts.update(
-                    alerts => [...alerts, {id: uuidv4(), title: 'You\'re crazy!', context: 'Answer streak of 15!', time: 5, undomult: 1, valid: true}]
-                )
-            } else if(userData.correctStreak == 10){
-                alerts.update(
-                    alerts => [...alerts, {id: uuidv4(), title: 'Alright!', context: 'Answer streak of 10!', time: 5, undomult: 1, valid: true}]
-                )
-            } else if(userData.correctStreak == 5 ){
-                
-                    alerts.update(
-                        alerts => [...alerts, {id: uuidv4(), title: 'Good Job!', context: 'Answer streak of 5!', time: 5, undomult: 1, valid: true}]
-                    )
-            }
         } else if(answer != event.answer){
             usrData.set({
                 name: userData.name,
@@ -69,10 +73,10 @@
             }
             
             alerts.update(
-                alerts => [...alerts, {id: uuidv4(), title: event.incorrectEffect.name, context: event.incorrectEffect.context, time: event.incorrectEffect.time, undomult: 2, valid: true}]
+                alerts => [...alerts, {id: uuidv4(), title: event.incorrectEffect.name, context: event.incorrectEffect.context, time: event.incorrectEffect.time, undomult: 2, valid: true}, {id: uuidv4(), title: 'Streak Lost', context: 'You lost your answer streak!', time: 5, undomult: 1, valid: true}]
             ) 
         }
-        const record = pb.collection('players').update(uidVar, userData)
+        const record = pb.collection('players').update(uidVar, userData, {$autoCancel:false})
     }
 
 

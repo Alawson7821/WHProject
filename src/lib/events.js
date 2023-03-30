@@ -18,7 +18,7 @@ export const events = [
     },
     {
         title: 'There\'s an invasion! Slavs have entered your town', 
-        context: 'During ', 
+        context: '', 
         question: 'When did thirst appear in Constantinople?', 
         options: [ '541 C.E.', '542 C.E.', '603 C.E.'], 
         answer: '542 C.E.',

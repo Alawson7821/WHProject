@@ -6,6 +6,7 @@
     var name;
     let nameOkay = true;
     let spinnerVis = false;
+    let nameError;
    
     const loginHandler = async () => {
         spinnerVis = true;
@@ -31,8 +32,12 @@
 
         birthStatus = 'Slave'
 
+        let playersls;
+
         if(name == ""){
             nameOkay=false
+            nameError = "Please enter a name!"
+            spinnerVis = false
             return
         }
 
@@ -44,10 +49,18 @@
             "currentScoreEffect": 1,
             "correctStreak": 0,
         };
-        const record = await pb.collection('players').create(data);
-        uid.set(record.id);
-        usrData.set({score: data.score, name: data.name, gender: data.gender, birthStatus: data.birthStatus, currentScoreEffect: data.currentScoreEffect, correctStreak: data.correctStreak});
-        currentPg.set(1)
+
+        const record = pb.collection('players').create(data).then((record) => {
+            uid.set(record.id);
+            usrData.set({score: data.score, name: data.name, gender: data.gender, birthStatus: data.birthStatus, currentScoreEffect: data.currentScoreEffect, correctStreak: data.correctStreak});
+            currentPg.set(1)
+        }
+        ).catch((error) => {
+            nameOkay = false
+            nameError = 'The name you enterd has already been used, please choose a different name!'
+            spinnerVis = false
+            return
+        })
     }
 
 </script>
@@ -58,7 +71,7 @@
             <FloatingLabelInput bind:value={name} style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="Name"/>
         {:else if !nameOkay}
             <FloatingLabelInput bind:value={name} color="red" style="outlined" id="floating_outlined" name="floating_outlined" type="text" label="Name"/>
-            <Helper color="red">Please enter a name!</Helper>
+            <Helper color="red">{nameError}</Helper>
         {/if}
     </div>
     <Button on:click={loginHandler}>Go!</Button>

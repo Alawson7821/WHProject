@@ -2,6 +2,7 @@
     import {A, Alert, Button, Progressbar} from 'flowbite-svelte';
     import {createEventDispatcher, onDestroy } from 'svelte/internal';
     import { alerts, usrData, alertComponentCount } from '../stores';
+    import { sineIn } from 'svelte/easing';
 
     const d = Date;
 
@@ -50,12 +51,18 @@
     if(alertComponents <= 1){
         AlertsDisappear();
     }
+
+    let transitionParams = {
+        x: -320,
+        duration: 200,
+        easing: sineIn
+    };
 </script>
 
 <div id="Alerts" class="flex flex-col-reverse space-y-5">
     {#each Alerts as Alerts}
         {#if Alerts.time > 0 && Alerts.valid}
-            <Alert border color="red" class="mt-5">
+            <Alert  border color="red" class="mt-5">
                 <p class="text-lg">{Alerts.title}</p>
                 <p>{Alerts.context}</p>
                 <p>{Alerts.time}</p>
